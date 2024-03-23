@@ -4,7 +4,8 @@ extends CharacterBody3D
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 @export var CAMERA_CONTROLLER : Camera3D
-
+@export var ANIMATION_PLAYER : AnimationPlayer
+@export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
@@ -14,7 +15,7 @@ var _tilt_input : float
 var _mouse_rotation : Vector3
 var _player_rotation : Vector3
 var _camera_rotation : Vector3
-
+var _is_crouching : bool = false
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -40,6 +41,8 @@ func _exit():
 func _input(event):
 	if event.is_action_pressed("toggle_mouse_tracking"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if event.is_action_pressed("crouch"):
+		toggle_crouch()
 	
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -71,3 +74,10 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
+
+func toggle_crouch():
+	if _is_crouching:
+		ANIMATION_PLAYER.play("Crouch", -1, -CROUCH_SPEED, true)
+	else:
+		ANIMATION_PLAYER.play("Crouch", -1, CROUCH_SPEED)
+	_is_crouching = !_is_crouching

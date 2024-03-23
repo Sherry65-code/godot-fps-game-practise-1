@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://c7kpjcoxpe03q"]
+[gd_scene load_steps=15 format=3 uid="uid://c7kpjcoxpe03q"]
 
 [ext_resource type="Texture2D" uid="uid://c5r38hh0yyqn3" path="res://HDRIs/sunflowers_puresky_4k.hdr" id="1_qdp5r"]
 [ext_resource type="Material" uid="uid://cdtuceietesh1" path="res://Materials/Floor-1.tres" id="2_suv22"]
+[ext_resource type="Material" uid="uid://cvwkd7ysrd20m" path="res://Materials/box-1.tres" id="3_07n0j"]
 [ext_resource type="PackedScene" uid="uid://bsm4difams88w" path="res://player.tscn" id="4_0uf8w"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_ifaw4"]
@@ -21,9 +22,14 @@ sky = SubResource("Sky_237j3")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_igq4m"]
 data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_fo0rh"]
+[sub_resource type="BoxMesh" id="BoxMesh_hmmq8"]
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_oegg0"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_j5epn"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0ejik"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_tglv4"]
 data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
 [node name="Scene" type="Node3D"]
@@ -50,16 +56,25 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/Plane/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_igq4m")
 
-[node name="Cube" type="MeshInstance3D" parent="World"]
-transform = Transform3D(0.2, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 1.05788, 0)
-mesh = SubResource("BoxMesh_fo0rh")
-skeleton = NodePath("../..")
+[node name="UpperPlatform" type="MeshInstance3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 0.0831113, 0, 0, 0, 0.468345, -0.462, 2, 0)
+material_override = ExtResource("3_07n0j")
+mesh = SubResource("BoxMesh_hmmq8")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World/Cube"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/UpperPlatform"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Cube/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00138521, 0, -0.0131824)
-shape = SubResource("ConcavePolygonShape3D_oegg0")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/UpperPlatform/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_j5epn")
+
+[node name="LowerPlatform" type="MeshInstance3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 0.08, 0, 0, 0, 0.468, 0.71, 1.5, 0)
+material_override = ExtResource("3_07n0j")
+mesh = SubResource("BoxMesh_0ejik")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/LowerPlatform"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/LowerPlatform/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_tglv4")
 
 [node name="Player" parent="." instance=ExtResource("4_0uf8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.680177, 1.46361, 3.53776)
