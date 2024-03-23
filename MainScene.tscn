@@ -63,3 +63,4 @@ shape = SubResource("ConcavePolygonShape3D_oegg0")
 
 [node name="Player" parent="." instance=ExtResource("4_0uf8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.680177, 1.46361, 3.53776)
+MOUSE_SENSITIVITY = 0.1
