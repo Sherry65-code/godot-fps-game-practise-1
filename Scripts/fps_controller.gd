@@ -34,9 +34,12 @@ func _update_camera(delta):
 	_rotation_input = 0.0
 	_tilt_input = 0.0
 
+func _exit():
+	get_tree().quit()
+
 func _input(event):
-	if event.is_action_pressed("exit"):
-		get_tree().quit()
+	if event.is_action_pressed("toggle_mouse_tracking"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -46,6 +49,8 @@ func _unhandled_input(event):
 	if _mouse_input:
 		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
 		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
+	elif Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE and event is InputEventMouseButton:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta):
 	if not is_on_floor():
