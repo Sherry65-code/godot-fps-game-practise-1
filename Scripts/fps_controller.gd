@@ -1,14 +1,18 @@
 extends CharacterBody3D
 
+@export_range(1, 10, 0.1) var WALK_MOVE_SPEED : float = 5.0
+@export_range(1, 10, 0.1) var CROUCH_MOVE_SPEED : float = 2.0
 @export var MOUSE_SENSITIVITY : float = 0.5
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 @export var CAMERA_CONTROLLER : Camera3D
 @export var ANIMATION_PLAYER : AnimationPlayer
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
-const SPEED = 5.0
+@export var CROUCH_SHAPECAST : Node3D
+
 const JUMP_VELOCITY = 4.5
 
+var _speed : float
 var _mouse_input : bool = false
 var _rotation_input : float
 var _tilt_input : float
@@ -46,6 +50,10 @@ func _input(event):
 	
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	_speed = WALK_MOVE_SPEED
+	
+	CROUCH_SHAPECAST.add_exception($".")
 
 func _unhandled_input(event):
 	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
@@ -67,17 +75,28 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * _speed
+		velocity.z = direction.z * _speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, _speed)
+		velocity.z = move_toward(velocity.z, 0, _speed)
 
 	move_and_slide()
 
 func toggle_crouch():
-	if _is_crouching:
+	if _is_crouching and !CROUCH_SHAPECAST.is_colliding():
 		ANIMATION_PLAYER.play("Crouch", -1, -CROUCH_SPEED, true)
+		set_movement_speed("default")
 	else:
 		ANIMATION_PLAYER.play("Crouch", -1, CROUCH_SPEED)
+		set_movement_speed("crouching")
+
+func _on_animation_player_animation_started(anim_name):
 	_is_crouching = !_is_crouching
+
+func set_movement_speed(state : String):
+	match state:
+		"default":
+			_speed = WALK_MOVE_SPEED
+		"crouching":
+			_speed = CROUCH_MOVE_SPEED

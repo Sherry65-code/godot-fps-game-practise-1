@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bsm4difams88w"]
+[gd_scene load_steps=9 format=3 uid="uid://bsm4difams88w"]
 
 [ext_resource type="Script" path="res://Scripts/fps_controller.gd" id="1_3qu36"]
+[ext_resource type="Script" path="res://Scripts/Reticle.gd" id="2_ra4ma"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qvjbl"]
 
@@ -90,13 +91,16 @@ _data = {
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ydly0"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER", "ANIMATION_PLAYER")]
+[sub_resource type="SphereShape3D" id="SphereShape3D_q7x4f"]
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER", "ANIMATION_PLAYER", "CROUCH_SHAPECAST")]
 floor_stop_on_slope = false
 floor_constant_speed = true
 floor_block_on_wall = false
 script = ExtResource("1_3qu36")
 CAMERA_CONTROLLER = NodePath("CameraController/Camera")
 ANIMATION_PLAYER = NodePath("AnimationPlayer")
+CROUCH_SHAPECAST = NodePath("ShapeCast3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_qvjbl")
@@ -113,3 +117,54 @@ libraries = {
 
 [node name="Capsule" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_ydly0")
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.496377, 0)
+shape = SubResource("SphereShape3D_q7x4f")
+target_position = Vector3(0, 0.5, 0)
+debug_shape_custom_color = Color(0, 0.760784, 0.333333, 1)
+
+[node name="UserInterface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Reticle" type="CenterContainer" parent="UserInterface" node_paths=PackedStringArray("RETICLE_LINES", "PLAYER_CONTROLLER")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_ra4ma")
+RETICLE_LINES = [NodePath("Top"), NodePath("Right"), NodePath("Bottom"), NodePath("Left")]
+PLAYER_CONTROLLER = NodePath("../..")
+DOT_RADIUS = 1.4
+
+[node name="Top" type="Line2D" parent="UserInterface/Reticle"]
+points = PackedVector2Array(0, -5, 0, -15)
+width = 2.0
+
+[node name="Left" type="Line2D" parent="UserInterface/Reticle"]
+points = PackedVector2Array(-5, 0, -15, 0)
+width = 2.0
+
+[node name="Bottom" type="Line2D" parent="UserInterface/Reticle"]
+points = PackedVector2Array(0, 5, 0, 15)
+width = 2.0
+
+[node name="Right" type="Line2D" parent="UserInterface/Reticle"]
+points = PackedVector2Array(5, 0, 15, 0)
+width = 2.0
+
+[connection signal="animation_started" from="AnimationPlayer" to="." method="_on_animation_player_animation_started"]
