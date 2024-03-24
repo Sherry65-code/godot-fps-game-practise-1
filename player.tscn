@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bsm4difams88w"]
+[gd_scene load_steps=11 format=3 uid="uid://bsm4difams88w"]
 
 [ext_resource type="Script" path="res://Scripts/fps_controller.gd" id="1_3qu36"]
 [ext_resource type="Script" path="res://Scripts/Reticle.gd" id="2_ra4ma"]
+[ext_resource type="Theme" uid="uid://dogx6j7uyq4uq" path="res://Themes/debug.tres" id="3_5xpgp"]
+[ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="4_1kuhr"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qvjbl"]
 
@@ -149,6 +151,7 @@ grow_vertical = 2
 script = ExtResource("2_ra4ma")
 RETICLE_LINES = [NodePath("Top"), NodePath("Right"), NodePath("Bottom"), NodePath("Left")]
 PLAYER_CONTROLLER = NodePath("../..")
+RETICLE_DISTANCE = 6.0
 DOT_RADIUS = 1.4
 
 [node name="Top" type="Line2D" parent="UserInterface/Reticle"]
@@ -166,5 +169,21 @@ width = 2.0
 [node name="Right" type="Line2D" parent="UserInterface/Reticle"]
 points = PackedVector2Array(5, 0, 15, 0)
 width = 2.0
+
+[node name="DebugPanel" type="PanelContainer" parent="UserInterface"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 50.0
+theme = ExtResource("3_5xpgp")
+script = ExtResource("4_1kuhr")
+
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/DebugPanel"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/DebugPanel/MarginContainer"]
+layout_mode = 2
 
 [connection signal="animation_started" from="AnimationPlayer" to="." method="_on_animation_player_animation_started"]

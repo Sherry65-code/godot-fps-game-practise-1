@@ -16,7 +16,6 @@ func _ready():
 func _process(delta):
 	adjust_reticle_lines()
 
-
 func _draw():
 		draw_circle(Vector2(0, 0), DOT_RADIUS, DOT_COLOR)
 
